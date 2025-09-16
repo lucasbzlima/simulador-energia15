@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Simulador de Desconto de Energia</title>
   <style>
     body {
@@ -11,15 +11,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
+      padding: 20px;
     }
     .container {
       background: #fff;
-      padding: 30px;
-      border-radius: 10px;
+      padding: 25px;
+      border-radius: 12px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
     }
     h2 {
@@ -34,20 +35,21 @@
     }
     input {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       margin-top: 5px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-size: 16px;
     }
     button {
       background: #28a745;
       color: #fff;
       border: none;
-      padding: 10px;
+      padding: 12px;
       width: 100%;
-      border-radius: 5px;
-      font-size: 16px;
+      border-radius: 6px;
+      font-size: 18px;
       cursor: pointer;
     }
     button:hover {
@@ -59,6 +61,13 @@
       background: #f9f9f9;
       border-radius: 8px;
       border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    .erro {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
     }
   </style>
 </head>
@@ -66,20 +75,30 @@
   <div class="container">
     <h2>Simule seu Desconto</h2>
     <label for="iluminacao">Iluminação Pública (R$):</label>
-    <input type="number" id="iluminacao" placeholder="Ex: 17">
+    <input type="number" id="iluminacao" inputmode="decimal" min="0" placeholder="Ex: 17">
 
     <label for="consumo">Consumo Mensal (kWh):</label>
-    <input type="number" id="consumo" placeholder="Ex: 220">
+    <input type="number" id="consumo" inputmode="decimal" min="0" placeholder="Ex: 220">
 
     <button onclick="calcular()">Calcular</button>
 
     <div class="resultado" id="resultado"></div>
+    <div class="erro" id="erro"></div>
   </div>
 
   <script>
     function calcular() {
       let iluminacao = parseFloat(document.getElementById('iluminacao').value) || 0;
       let consumo = parseFloat(document.getElementById('consumo').value) || 0;
+
+      // Validação de negativos
+      if (iluminacao < 0 || consumo < 0) {
+        document.getElementById('erro').textContent = "⚠️ Os valores não podem ser negativos.";
+        document.getElementById('resultado').innerHTML = "";
+        return;
+      } else {
+        document.getElementById('erro').textContent = "";
+      }
 
       // Tarifas fixas da planilha
       const tarifaTE = 0.32159;
@@ -95,10 +114,15 @@
       let descontoMensal = valorConsumo * desconto;
       let descontoAnual = descontoMensal * 12;
 
+      // Formatação em R$ (compatível com Safari iOS)
+      function formatar(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+
       document.getElementById('resultado').innerHTML = `
-        <p><strong>Valor estimado da fatura:</strong> R$ ${valorTotal.toFixed(2)}</p>
-        <p><strong>Desconto mensal previsto:</strong> R$ ${descontoMensal.toFixed(2)}</p>
-        <p><strong>Desconto anual previsto:</strong> R$ ${descontoAnual.toFixed(2)}</p>
+        <p><strong>Valor estimado da fatura:</strong> ${formatar(valorTotal)}</p>
+        <p><strong>Desconto mensal previsto:</strong> ${formatar(descontoMensal)}</p>
+        <p><strong>Desconto anual previsto:</strong> ${formatar(descontoAnual)}</p>
       `;
     }
   </script>
