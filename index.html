@@ -92,7 +92,7 @@
       let valorTotal = valorConsumo + iluminacao;
 
       // Aplicando desconto (sem contar iluminação pública)
-      let descontoMensal = valorTotal - valorConsumo * desconto;
+      let descontoMensal = valorConsumo * desconto - valorTotal;
       let descontoAnual = descontoMensal * 12;
 
       document.getElementById('resultado').innerHTML = `
