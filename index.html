@@ -1,1 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Desconto de Energia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .resultado {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Simule seu Desconto</h2>
+    <label for="iluminacao">Iluminação Pública (R$):</label>
+    <input type="number" id="iluminacao" placeholder="Ex: 17">
 
+    <label for="consumo">Consumo Mensal (kWh):</label>
+    <input type="number" id="consumo" placeholder="Ex: 220">
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div class="resultado" id="resultado"></div>
+  </div>
+
+  <script>
+    function calcular() {
+      let iluminacao = parseFloat(document.getElementById('iluminacao').value) || 0;
+      let consumo = parseFloat(document.getElementById('consumo').value) || 0;
+
+      // Tarifas fixas da planilha
+      const tarifaTE = 0.32159;
+      const tarifaTUSD = 0.6098;
+      const adcBandeira = 0.10328;
+      const desconto = 0.15; // 15%
+
+      // Cálculo do valor da fatura
+      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + adcBandeira);
+      let valorTotal = valorConsumo + iluminacao;
+
+      // Aplicando desconto (sem contar iluminação pública)
+      let descontoMensal = valorConsumo * desconto;
+      let descontoAnual = descontoMensal * 12;
+
+      document.getElementById('resultado').innerHTML = `
+        <p><strong>Valor estimado da fatura:</strong> R$ ${valorTotal.toFixed(2)}</p>
+        <p><strong>Desconto mensal previsto:</strong> R$ ${descontoMensal.toFixed(2)}</p>
+        <p><strong>Desconto anual previsto:</strong> R$ ${descontoAnual.toFixed(2)}</p>
+      `;
+    }
+  </script>
+</body>
+</html>
