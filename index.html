@@ -108,11 +108,11 @@
       const desconto = 0.15; // 15%
 
       // Cálculo do valor da fatura
-      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + iluminacao + adcBandeira);
+      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + iluminacao + adcBandeira*10);
       let valorTotal = valorConsumo;
 
       // Aplicando desconto (sem contar iluminação pública)
-      let descontoMensal = valorTotal - 0.85; // 100% - 15% = 85%
+      let descontoMensal = valorConsumo - 0.85; // 100% - 15% = 85%
       let descontoAnual = descontoMensal * 12;
 
       // Formatação em R$ (compatível com Safari iOS)
