@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -82,25 +81,7 @@
       let iluminacao = parseFloat(document.getElementById('iluminacao').value) || 0;
       let consumo = parseFloat(document.getElementById('consumo').value) || 0;
 
-      // Tarifas fixas da planilha
-      const tarifaTE = 0.32159;
-      const tarifaTUSD = 0.6098;
-      const adcBandeira = 0.10328;
-      const desconto = 0.15; // 15%
-
-      // Cálculo do valor da fatura
-      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + adcBandeira);
-      let valorTotal = valorConsumo + iluminacao;
-
-      // Aplicando desconto (sem contar iluminação pública)
-      let descontoMensal = valorConsumo * desconto;
-      let descontoAnual = descontoMensal * 12;
-
-      document.getElementById('resultado').innerHTML = `
-        <p><strong>Valor estimado da fatura:</strong> R$ ${valorTotal.toFixed(2)}</p>
-        <p><strong>Desconto mensal previsto:</strong> R$ ${descontoMensal.toFixed(2)}</p>
-        <p><strong>Desconto anual previsto:</strong> R$ ${descontoAnual.toFixed(2)}</p>
-      `;
+     
     }
   </script>
 </body>
