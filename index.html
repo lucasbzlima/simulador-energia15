@@ -136,9 +136,9 @@
   </div>
 
   <script>
-    function calcular() {
-      let iluminacao = parseFloat(document.getElementById('iluminacao').value) || 0;
-      let consumo = parseFloat(document.getElementById('consumo').value) || 0;
+     function calcular() {
+      const iluminacaoInput = document.getElementById('iluminacao').value.replace(',', '.');
+      const consumoInput = document.getElementById('consumo').value.replace(',', '.');
 
       // Validação de negativos
       if (iluminacao < 0 || consumo < 0) {
