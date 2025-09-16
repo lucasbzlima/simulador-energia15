@@ -64,7 +64,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Simule seu Desconto 15%</h2>
+    <h2>Simule seu Desconto 1555</h2>
     <label for="iluminacao">Iluminação Pública (R$):</label>
     <input type="number" id="iluminacao" placeholder="Ex: 17">
 
@@ -88,13 +88,12 @@
       const desconto = 0.15; // 15%
 
       // Cálculo do valor da fatura
-      const descontoMensal = valorConsumo * desconto;
-      const descontoAnual = descontoMensal * 12;
+      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + adcBandeira);
+      let valorTotal = valorConsumo + iluminacao;
 
-      
       // Aplicando desconto (sem contar iluminação pública)
-      const descontoMensal = valorConsumo - desconto - valorTotal;
-      const descontoAnual = descontoMensal * 12;
+      let descontoMensal = valorConsumo * desconto;
+      let descontoAnual = descontoMensal * 12;
 
       document.getElementById('resultado').innerHTML = `
         <p><strong>Valor estimado da fatura:</strong> R$ ${valorTotal.toFixed(2)}</p>
