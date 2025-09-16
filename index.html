@@ -108,7 +108,7 @@
 
       // Cálculo do valor da fatura
       let valorConsumo = consumo * (tarifaTE + tarifaTUSD + (adcBandeira * 10));
-      let valorTotal = valorConsumo;
+      let valorTotal = valorConsumo + iluminacao;
 
       // Aplicando desconto (sem contar iluminação pública)
       let descontoMensal = valorConsumo - 0.85; // 100% - 15% = 85%
