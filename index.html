@@ -2,9 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Desconto de Energia</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f9;
@@ -12,13 +16,13 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 5;
+      margin: 0;
       padding: 20px;
     }
 
     .top-image {
       width: 70%;
-      height: 300px;
+      height: 340px;
       background: url("LOGO-03.png") no-repeat center center;
       background-size: cover;
       position: fixed;
@@ -35,7 +39,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       max-width: 420px;
       width: 100%;
-      margin-top: 200px; /* para não ficar escondido atrás da imagem */
+      margin-top: 200px;
     }
 
     h2 {
@@ -52,7 +56,7 @@
 
     input {
       width: 100%;
-      padding: 7px;
+      padding: 10px;
       margin-top: 5px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
@@ -90,7 +94,8 @@
       margin-top: 10px;
       text-align: center;
     }
-          /* RESPONSIVIDADE PARA CELULAR */
+
+    /* Responsividade para celulares */
     @media (max-width: 480px) {
       .top-image {
         height: 180px;
@@ -117,17 +122,16 @@
   </style>
 </head>
 <body>
-  
-  <!-- Imagem superior -->
   <div class="top-image"></div>
 
   <div class="container">
     <h2>Simule seu Desconto de 15%</h2>
+
     <label for="iluminacao">Iluminação Pública (R$):</label>
-    <input type="number" id="iluminacao" inputmode="decimal" min="0" placeholder="Ex: 17,65">
+    <input type="text" id="iluminacao" inputmode="decimal" placeholder="Ex: 17,65">
 
     <label for="consumo">Consumo Mensal (kWh):</label>
-    <input type="number" id="consumo" inputmode="decimal" min="0" placeholder="Ex: 220">
+    <input type="text" id="consumo" inputmode="decimal" placeholder="Ex: 220,5">
 
     <button onclick="calcular()">Calcular</button>
 
@@ -137,43 +141,12 @@
 
   <script>
     function calcular() {
-      let iluminacao = parseFloat(document.getElementById('iluminacao').value) || 0;
-      let consumo = parseFloat(document.getElementById('consumo').value) || 0;
-
-      // Validação de negativos
-      if (iluminacao < 0 || consumo < 0) {
-        document.getElementById('erro').textContent = "⚠️ Os valores não podem ser negativos.";
-        document.getElementById('resultado').innerHTML = "";
-        return;
-      } else {
-        document.getElementById('erro').textContent = "";
+      function limparNumero(valor) {
+        return parseFloat(
+          valor.replace(/\s/g, '')  // Remove espaços
+               .replace(',', '.')   // Troca vírgula por ponto
+        ) || 0;
       }
 
-      // Tarifas fixas da planilha
-      const tarifaTE = 0.32159;
-      const tarifaTUSD = 0.6098;
-      const adcBandeira = 0.10328;
-      const desconto = 0.15; // 15%
-
-      // Cálculo do valor da fatura
-      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + adcBandeira);
-      let valorTotal = valorConsumo;
-
-      // Aplicando desconto (sem contar iluminação pública)
-      let descontoMensal = valorTotal * desconto;
-      let descontoAnual = descontoMensal * 12;
-
-      // Formatação em R$ (compatível com Safari iOS)
-      function formatar(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-      }
-
-      document.getElementById('resultado').innerHTML = `
-        <p><strong>Valor estimado da fatura:</strong> ${formatar(valorTotal)}</p>
-        <p><strong>Desconto mensal previsto:</strong> ${formatar(descontoMensal)}</p>
-        <p><strong>Desconto anual previsto:</strong> ${formatar(descontoAnual)}</p>
-      `;
-    }
-  </script>
-</body>
-</html>
+      const iluminacao = limparNumero(document.getElementById('iluminacao').value);
+      const consumo = limparNumero(document.getElementById
