@@ -201,6 +201,14 @@
         return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       }
 
+      function mostrarImagem() {
+        document.getElementById('tooltipImagem').style.display = 'block';
+      }
+
+      function esconderImagem() {
+        document.getElementById('tooltipImagem').style.display = 'none';
+      }
+
       document.getElementById('resultado').innerHTML = `
         <p><strong>Valor estimado da fatura:</strong> ${formatar(valorTotal)}</p>
         <p><strong>Desconto mensal previsto:</strong> ${formatar(descontoMensal)}</p>
