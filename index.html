@@ -5,20 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Simulador de Desconto de Energia</title>
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f9;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 5;
-      padding: 20px;
     }
 
     .top-image {
-      width: 70%;
-      height: 300px;
+      width: 50%;
+      height: 180px;
       background: url("LOGO-03.png") no-repeat center center;
       background-size: cover;
       position: fixed;
@@ -27,12 +30,7 @@
       transform: translateX(-50%);
       z-index: 1000;
     }
-      .tooltip-container {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-    
+
     .container {
       background: #fff;
       padding: 25px;
@@ -40,7 +38,7 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       max-width: 420px;
       width: 100%;
-      margin-top: 200px; /* para não ficar escondido atrás da imagem */
+      margin-top: 200px;
     }
 
     h2 {
@@ -101,12 +99,12 @@
       display: inline-block;
       width: 100%;
     }
-    
+
     .tooltip-img {
       display: none;
       position: absolute;
-      top: 35px; /* ajusta verticalmente */
-      left: 105%; /* posiciona à direita do input */
+      top: 35px;
+      left: 105%;
       z-index: 999;
       background: #fff;
       padding: 6px;
@@ -116,11 +114,11 @@
     }
 
     .tooltip-img img {
-      width: 160px; /* ou o tamanho que desejar */
+      width: 160px;
       height: auto;
       border-radius: 4px;
     }
-          /* RESPONSIVIDADE PARA CELULAR */
+
     @media (max-width: 480px) {
       .top-image {
         height: 180px;
@@ -152,25 +150,24 @@
   <div class="top-image"></div>
 
   <div class="container">
-    <h2>Simule seu Desconto de 15%</h2>
-    
-    <label for="iluminacao">Iluminação Pública (R$):</label> 
+    <h2>Simule seu Desconto de 20%</h2>
+
+    <label for="iluminacao">Iluminação Pública (R$):</label>
     <input type="number" id="iluminacao" inputmode="decimal" min="0" placeholder="Ex: 17,65">
 
-    <!-- Campo de Consumo Mensal com tooltip -->
-  <div class="tooltip-container">
-    <label for="consumo">Consumo Mensal (kWh):</label>
-    <input type="number" id="consumo" inputmode="decimal" min="0" placeholder="Ex: 220"
-         onmouseover="mostrarImagem()" 
-         onmouseout="esconderImagem()"
-         onfocus="mostrarImagem()"
-         onblur="esconderImagem()">
+    <div class="tooltip-container">
+      <label for="consumo">Consumo Mensal (kWh):</label>
+      <input type="number" id="consumo" inputmode="decimal" min="0" placeholder="Ex: 220"
+             onmouseover="mostrarImagem()" 
+             onmouseout="esconderImagem()" 
+             onfocus="mostrarImagem()" 
+             onblur="esconderImagem()">
 
-  <!-- Tooltip com imagem -->
-  <div id="tooltipImagem" class="tooltip-img">
-    <img src="consumo1.PNG" alt="Dica de consumo">
+      <!-- Tooltip com imagem -->
+      <div id="tooltipImagem" class="tooltip-img">
+        <img src="consumo1.png" alt="Dica de consumo">
+      </div>
     </div>
-  </div> 
 
     <button onclick="calcular()">Calcular</button>
 
@@ -183,8 +180,7 @@
       let iluminacao = parseFloat(document.getElementById('iluminacao').value) || 0;
       let consumo = parseFloat(document.getElementById('consumo').value) || 0;
 
-      // Validação de negativos
-      if (iluminacao <= 0 || consumo <= 0) {
+      if (iluminacao <= 0 || consumo < 0) {
         document.getElementById('erro').textContent = "⚠️ Os valores não podem ser negativos.";
         document.getElementById('resultado').innerHTML = "";
         return;
@@ -192,21 +188,17 @@
         document.getElementById('erro').textContent = "";
       }
 
-      // Tarifas fixas da planilha
       const tarifaTE = 0.32159;
       const tarifaTUSD = 0.6098;
       const adcBandeira = 0.10328;
-      const desconto = 0.15; // 15%
+      const desconto = 0.20;
 
-      // Cálculo do valor da fatura
-      let valorConsumo = consumo * (tarifaTE + tarifaTUSD + adcBandeira);
-      let valorTotal = valorConsumo;
+      let valorConsumo = (consumo * (tarifaTE + tarifaTUSD)) + (consumo * adcBandeira);
+      let valorTotal = valorConsumo + iluminacao;
 
-      // Aplicando desconto (sem contar iluminação pública)
-      let descontoMensal = valorTotal * desconto;
+      let descontoMensal = valorConsumo * desconto;
       let descontoAnual = descontoMensal * 12;
 
-      // Formatação em R$ (compatível com Safari iOS)
       function formatar(valor) {
         return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
       }
@@ -216,17 +208,24 @@
         <p><strong>Desconto mensal previsto:</strong> ${formatar(descontoMensal)}</p>
         <p><strong>Desconto anual previsto:</strong> ${formatar(descontoAnual)}</p>
       `;
-      }  
-      
-      function mostrarImagem() {
-        document.getElementById('tooltipImagem').style.display = 'block';
-      }
-
-      function esconderImagem() {
-        document.getElementById('tooltipImagem').style.display = 'none';
-      }
-      
     }
+
+    function mostrarImagem() {
+      document.getElementById('tooltipImagem').style.display = 'block';
+    }
+
+    function esconderImagem() {
+      document.getElementById('tooltipImagem').style.display = 'none';
+    }
+
+    // Esconder tooltip em toque fora (para mobile)
+    document.addEventListener('touchstart', function(event) {
+      const tooltip = document.getElementById('tooltipImagem');
+      const input = document.getElementById('consumo');
+      if (!input.contains(event.target) && !tooltip.contains(event.target)) {
+        esconderImagem();
+      }
+    });
   </script>
 </body>
 </html>
